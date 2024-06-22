@@ -1,0 +1,15 @@
+<.header>
+  Fornecedor: <%= @supplier.id %>
+  <%!-- <:subtitle>This is a supplier record from your database.</:subtitle> --%>
+  <:actions>
+    <.link href={~p"/suppliers/#{@supplier}/edit"}>
+      <.button>Editar</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Nome"><%= @supplier.name %></:item>
+</.list>
+
+<.back navigate={~p"/suppliers"}>Voltar</.back>

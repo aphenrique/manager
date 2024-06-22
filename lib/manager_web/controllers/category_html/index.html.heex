@@ -1,0 +1,24 @@
+<.header>
+  Categorias
+  <:actions>
+    <.link href={~p"/categories/new"}>
+      <.button>Adicionar categoria</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="categories" rows={@categories} row_click={&JS.navigate(~p"/categories/#{&1}")}>
+  <:col :let={category} label="Nome"><%= category.name %></:col>
+  <:col :let={category} label="Ícone"><%= category.icon %></:col>
+  <:action :let={category}>
+    <div class="sr-only">
+      <.link navigate={~p"/categories/#{category}"}>Exibir</.link>
+    </div>
+    <.link navigate={~p"/categories/#{category}/edit"}>Editar</.link>
+  </:action>
+  <:action :let={category}>
+    <.link href={~p"/categories/#{category}"} method="delete" data-confirm="Tem certeza?">
+      Deletar
+    </.link>
+  </:action>
+</.table>

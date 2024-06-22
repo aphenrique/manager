@@ -1,0 +1,9 @@
+<.simple_form :let={f} for={@changeset} action={@action}>
+  <.error :if={@changeset.action}>
+    Oops, alguma coisa não saiu como esperado. Confira abaixo
+  </.error>
+  <.input field={f[:name]} type="text" label="Nome" />
+  <:actions>
+    <.button>Adicionar</.button>
+  </:actions>
+</.simple_form>

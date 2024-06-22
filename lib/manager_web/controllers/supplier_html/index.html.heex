@@ -1,0 +1,23 @@
+<.header>
+  Fornecedores
+  <:actions>
+    <.link href={~p"/suppliers/new"}>
+      <.button>Novo fornecedor</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="suppliers" rows={@suppliers} row_click={&JS.navigate(~p"/suppliers/#{&1}")}>
+  <:col :let={supplier} label="Nome"><%= supplier.name %></:col>
+  <:action :let={supplier}>
+    <div class="sr-only">
+      <.link navigate={~p"/suppliers/#{supplier}"}>Exibir</.link>
+    </div>
+    <.link navigate={~p"/suppliers/#{supplier}/edit"}>Editar</.link>
+  </:action>
+  <:action :let={supplier}>
+    <.link href={~p"/suppliers/#{supplier}"} method="delete" data-confirm="Tem certeza?">
+      Deletar
+    </.link>
+  </:action>
+</.table>
