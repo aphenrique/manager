@@ -1,0 +1,21 @@
+<.header>
+  Transaction <%= @transaction.id %>
+  <:subtitle>This is a transaction record from your database.</:subtitle>
+  <:actions>
+    <.link href={~p"/transactions/#{@transaction}/edit"}>
+      <.button>Edit transaction</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Name"><%= @transaction.name %></:item>
+  <:item title="Supplier"><%= @transaction.supplier_id %></:item>
+  <:item title="Category"><%= @transaction.category_id %></:item>
+  <:item title="Type"><%= @transaction.type %></:item>
+  <:item title="Value"><%= @transaction.value %></:item>
+  <:item title="Realized"><%= @transaction.realized %></:item>
+  <:item title="Date"><%= @transaction.date %></:item>
+</.list>
+
+<.back navigate={~p"/transactions"}>Back to transactions</.back>

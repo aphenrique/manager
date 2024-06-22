@@ -1,0 +1,8 @@
+<.header>
+  Edit Transaction <%= @transaction.id %>
+  <:subtitle>Use this form to manage transaction records in your database.</:subtitle>
+</.header>
+
+<.transaction_form changeset={@changeset} action={~p"/transactions/#{@transaction}"} />
+
+<.back navigate={~p"/transactions"}>Back to transactions</.back>

@@ -22,6 +22,7 @@ defmodule ManagerWeb.Router do
     resources "/categories", CategoryController
     resources "/suppliers", SupplierController
     resources "/accounts", AccountController
+    resources "/transactions", TransactionController
   end
 
   # Other scopes may use custom stacks.

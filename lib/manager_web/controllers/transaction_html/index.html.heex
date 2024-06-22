@@ -1,0 +1,29 @@
+<.header>
+  Listing Transactions
+  <:actions>
+    <.link href={~p"/transactions/new"}>
+      <.button>New Transaction</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/transactions/#{&1}")}>
+  <:col :let={transaction} label="Name"><%= transaction.name %></:col>
+  <:col :let={transaction} label="Supplier"><%= transaction.supplier_id %></:col>
+  <:col :let={transaction} label="Category"><%= transaction.category_id %></:col>
+  <:col :let={transaction} label="Type"><%= transaction.type %></:col>
+  <:col :let={transaction} label="Value"><%= transaction.value %></:col>
+  <:col :let={transaction} label="Realized"><%= transaction.realized %></:col>
+  <:col :let={transaction} label="Date"><%= transaction.date %></:col>
+  <:action :let={transaction}>
+    <div class="sr-only">
+      <.link navigate={~p"/transactions/#{transaction}"}>Show</.link>
+    </div>
+    <.link navigate={~p"/transactions/#{transaction}/edit"}>Edit</.link>
+  </:action>
+  <:action :let={transaction}>
+    <.link href={~p"/transactions/#{transaction}"} method="delete" data-confirm="Are you sure?">
+      Delete
+    </.link>
+  </:action>
+</.table>
