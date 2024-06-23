@@ -6,6 +6,17 @@ defmodule Manager.Transactions.Transaction do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @fields [
+    :name,
+    :type,
+    :value,
+    :date,
+    :supplier_id,
+    :category_id,
+    :account_id,
+    :realized
+  ]
+
   schema "transactions" do
     field :name, :string
     field :type, :string, default: "out"
@@ -22,7 +33,7 @@ defmodule Manager.Transactions.Transaction do
   @doc false
   def changeset(transaction, attrs) do
     transaction
-    |> cast(attrs, [:name, :supplier_id, :category_id, :type, :value, :realized, :date])
-    |> validate_required([:name, :supplier_id, :category_id, :type, :value, :realized, :date])
+    |> cast(attrs, @fields)
+    |> validate_required(@fields)
   end
 end

@@ -3,7 +3,7 @@ defmodule Manager.Repo.Migrations.CreateCategories do
 
   def change do
     create table(:categories) do
-      add :name, :string
+      add :name, :string, null: false
       add :icon, :string
 
       timestamps(type: :utc_datetime)

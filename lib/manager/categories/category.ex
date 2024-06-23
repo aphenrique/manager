@@ -13,6 +13,7 @@ defmodule Manager.Categories.Category do
   def changeset(category, attrs) do
     category
     |> cast(attrs, [:name, :icon])
-    |> validate_required([:name, :icon])
+    |> validate_required([:name])
+    |> validate_length(:name, min: 3)
   end
 end

@@ -16,10 +16,10 @@ defmodule ManagerWeb.CategoryController do
 
   def create(conn, %{"category" => category_params}) do
     case Categories.create_category(category_params) do
-      {:ok, category} ->
+      {:ok} ->
         conn
         |> put_flash(:info, "Category created successfully.")
-        |> redirect(to: ~p"/categories/#{category}")
+        |> redirect(to: ~p"/categories")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, :new, changeset: changeset)

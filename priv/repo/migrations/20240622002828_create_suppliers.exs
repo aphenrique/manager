@@ -3,7 +3,7 @@ defmodule Manager.Repo.Migrations.CreateSuppliers do
 
   def change do
     create table(:suppliers) do
-      add :name, :string
+      add :name, :string, null: false
 
       timestamps(type: :utc_datetime)
     end

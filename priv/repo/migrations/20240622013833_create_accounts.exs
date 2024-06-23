@@ -3,9 +3,9 @@ defmodule Manager.Repo.Migrations.CreateAccounts do
 
   def change do
     create table(:accounts) do
-      add :name, :string
-      add :type, :string
-      add :balance, :integer
+      add :name, :string, null: false
+      add :type, :string, null: false, default: "corrente"
+      add :balance, :integer, null: false, default: 0
 
       timestamps(type: :utc_datetime)
     end
