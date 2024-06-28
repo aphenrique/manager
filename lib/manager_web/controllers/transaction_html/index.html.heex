@@ -9,8 +9,9 @@
 
 <.table id="transactions" rows={@transactions} row_click={&JS.navigate(~p"/transactions/#{&1}")}>
   <:col :let={transaction} label="Name"><%= transaction.name %></:col>
-  <:col :let={transaction} label="Supplier"><%= transaction.supplier_id %></:col>
-  <:col :let={transaction} label="Category"><%= transaction.category_id %></:col>
+  <:col :let={transaction} label="Supplier"><%= transaction.supplier.name %></:col>
+  <:col :let={transaction} label="Category"><%= transaction.category.icon %></:col>
+  <:col :let={transaction} label="Account"><%= transaction.account.name %></:col>
   <:col :let={transaction} label="Type"><%= transaction.type %></:col>
   <:col :let={transaction} label="Value"><%= transaction.value %></:col>
   <:col :let={transaction} label="Realized"><%= transaction.realized %></:col>

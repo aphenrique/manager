@@ -26,9 +26,11 @@ defmodule ManagerWeb.Router do
   end
 
   # Other scopes may use custom stacks.
-  # scope "/api", ManagerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", ManagerWeb do
+    pipe_through :api
+
+    get "/accounts", AccountController, :index
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:manager, :dev_routes) do

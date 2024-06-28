@@ -10,4 +10,34 @@ defmodule ManagerWeb.TransactionHTML do
   attr :action, :string, required: true
 
   def transaction_form(assigns)
+
+  def category_opts(changeset) do
+    existing_ids =
+      changeset
+      |> Ecto.Changeset.get_change(:categories, [])
+      |> Enum.map(& &1.data.id)
+
+    for cat <- Manager.Categories.list_categories(),
+        do: [key: cat.name, value: cat.id, selected: cat.id in existing_ids]
+  end
+
+  def supplier_opts(changeset) do
+    existing_ids =
+      changeset
+      |> Ecto.Changeset.get_change(:suppliers, [])
+      |> Enum.map(& &1.data.id)
+
+    for sup <- Manager.Suppliers.list_suppliers(),
+        do: [key: sup.name, value: sup.id, selected: sup.id in existing_ids]
+  end
+
+  def account_opts(changeset) do
+    existing_ids =
+      changeset
+      |> Ecto.Changeset.get_change(:accounts, [])
+      |> Enum.map(& &1.data.id)
+
+    for acc <- Manager.Accounts.list_accounts(),
+        do: [key: acc.name, value: acc.id, selected: acc.id in existing_ids]
+  end
 end
