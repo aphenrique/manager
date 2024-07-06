@@ -1,4 +1,5 @@
 defmodule Manager.Accounts.Account do
+  alias Manager.Users.User
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,6 +7,7 @@ defmodule Manager.Accounts.Account do
     field :name, :string
     field :type, :string, default: "current"
     field :balance, :integer
+    belongs_to :user, User
 
     timestamps(type: :utc_datetime)
   end
@@ -13,7 +15,7 @@ defmodule Manager.Accounts.Account do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:name, :type, :balance])
+    |> cast(attrs, [:name, :type, :balance, :user_id])
     |> validate_required([:name, :type])
   end
 end

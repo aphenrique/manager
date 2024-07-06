@@ -6,9 +6,13 @@ defmodule Manager.Accounts do
 
   def list_accounts do
     Repo.all(Account)
+    |> Repo.preload([:user])
   end
 
-  def get_account!(id), do: Repo.get!(Account, id)
+  def get_account!(id) do
+    Repo.get!(Account, id)
+    |> Repo.preload([:user])
+  end
 
   def create_account(attrs \\ %{}) do
     %Account{}

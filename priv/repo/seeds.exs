@@ -9,3 +9,18 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+for cat <- [
+      %{name: "Alimentação", icon: "🍔"},
+      %{name: "Lazer", icon: "🛝"},
+      %{name: "Moradia", icon: "🏠"},
+      %{name: "Educação", icon: "📚"},
+      %{name: "Vestuário", icon: "👚"},
+      %{name: "Serviço", icon: "🛠️"},
+      %{name: "Transporte", icon: "🚘"},
+      %{name: "Conta", icon: "🧾"},
+      %{name: "Saúde", icon: "🩺"},
+      %{name: "Viagem", icon: "🧳"},
+      %{name: "Música", icon: "🎸"}
+    ] do
+  {:ok, _} = Manager.Categories.create_category(cat)
+end
