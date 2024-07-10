@@ -1,12 +1,19 @@
 defmodule Manager.Accounts do
   import Ecto.Query, warn: false
+  alias Manager.Users.User
   alias Manager.Repo
 
   alias Manager.Accounts.Account
 
-  def list_accounts do
+  def list_accounts() do
     Repo.all(Account)
     |> Repo.preload([:user])
+  end
+
+  def list_user_accounts(%User{} = user) do
+    IO.inspect(user.id)
+    # Repo.all(from u in Account, where: u.user_id == user.id)
+    # Repo.get(Account, id)
   end
 
   def get_account!(id) do

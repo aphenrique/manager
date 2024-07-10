@@ -5,7 +5,7 @@ defmodule ManagerWeb.AccountController do
   alias Manager.Accounts.Account
 
   def index(conn, _params) do
-    accounts = Accounts.list_accounts()
+    accounts = conn.assigns.current_user |> Accounts.list_user_accounts()
     render(conn, :index, accounts: accounts)
   end
 
