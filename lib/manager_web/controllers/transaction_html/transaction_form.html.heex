@@ -7,7 +7,7 @@
   <.input field={f[:supplier_id]} type="select" options={supplier_opts(@changeset)} />
   <%!-- <.input field={f[:category_id]} type="number" label="Category" /> --%>
   <.input field={f[:category_id]} type="select" options={category_opts(@changeset)} />
-  <%!-- <.input field={f[:account_id]} type="number" label="Account" /> --%>
+  <%!-- <.input field={f[:account_id]} type="number" label="Account" /> --%> IO.inspect(assigns)
   <.input field={f[:account_id]} type="select" options={account_opts(@changeset)} />
   <.input field={f[:type]} type="text" label="Type" />
   <.input field={f[:value]} type="number" label="Value" />
