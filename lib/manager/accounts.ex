@@ -10,10 +10,12 @@ defmodule Manager.Accounts do
     |> Repo.preload([:user])
   end
 
-  def list_user_accounts(%User{} = user) do
-    IO.inspect(user.id)
-    # Repo.all(from u in Account, where: u.user_id == user.id)
-    # Repo.get(Account, id)
+  def list_accounts_by_user(%User{} = user) do
+    Repo.all(
+      from a in Account,
+        where: a.user_id == ^user.id,
+        select: a
+    )
   end
 
   def get_account!(id) do

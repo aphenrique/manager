@@ -5,17 +5,23 @@ defmodule ManagerWeb.AccountController do
   alias Manager.Accounts.Account
 
   def index(conn, _params) do
-    accounts = conn.assigns.current_user |> Accounts.list_user_accounts()
+    user = conn.assigns.current_user
+
+    accounts = Accounts.list_accounts_by_user(user)
     render(conn, :index, accounts: accounts)
   end
 
   def new(conn, _params) do
     changeset = Accounts.change_account(%Account{})
+
     render(conn, :new, changeset: changeset)
   end
 
   def create(conn, %{"account" => account_params}) do
-    case Accounts.create_account(account_params) do
+    user = conn.assigns.current_user
+    account = Map.put(account_params, "user_id", user.id)
+
+    case Accounts.create_account(account) do
       {:ok, account} ->
         conn
         |> put_flash(:info, "Account created successfully.")

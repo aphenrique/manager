@@ -7,7 +7,7 @@ defmodule Manager.Accounts.Account do
     field :name, :string
     field :type, :string, default: "current"
     field :balance, :integer
-    belongs_to :user, User
+    belongs_to :user, User, type: :binary_id
 
     timestamps(type: :utc_datetime)
   end
@@ -16,6 +16,6 @@ defmodule Manager.Accounts.Account do
   def changeset(account, attrs) do
     account
     |> cast(attrs, [:name, :type, :balance, :user_id])
-    |> validate_required([:name, :type])
+    |> validate_required([:name, :type, :balance, :user_id])
   end
 end

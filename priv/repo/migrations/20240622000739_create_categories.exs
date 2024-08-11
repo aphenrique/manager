@@ -8,5 +8,7 @@ defmodule Manager.Repo.Migrations.CreateCategories do
 
       timestamps(type: :utc_datetime)
     end
+
+    create unique_index(:categories, [:name])
   end
 end

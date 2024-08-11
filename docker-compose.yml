@@ -1,14 +1,28 @@
-services: 
-  postgres:
+services:
+
+  # app:
+  #   image: aphenrique/manager_dev:v1
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   command: /bin/bash scripts/start
+  #   ports:
+  #     - "4000:4000"
+  #   depends_on:
+  #     - db
+  #   links:
+  #     - db
+
+  db:
     image: bitnami/postgresql:latest
     ports:
-      - '5432:5432'
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=manager_dev
     volumes:
-      - pools_pg_data:/bitnami/postgresql
+      - data:/data/db
 
 volumes:
-  pools_pg_data:
+  data:

@@ -7,6 +7,7 @@ defmodule Manager.Categories.Category do
     field :icon, :string
 
     timestamps(type: :utc_datetime)
+
   end
 
   @doc false
