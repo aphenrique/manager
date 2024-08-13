@@ -6,7 +6,7 @@ defmodule Manager.Repo.Migrations.CreateTransactions do
       add :name, :string, null: false
       add :supplier_id, references(:suppliers), null: false
       add :category_id, references(:categories), null: false
-      add :account_id, references(:accounts), null: false
+      add :account_id, references(:accounts, on_delete: :delete_all), null: false
       add :type, :string, default: "out"
       add :value, :integer, default: 0, null: false
       add :realized, :boolean, default: false, null: false
