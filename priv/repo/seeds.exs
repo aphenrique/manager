@@ -22,5 +22,13 @@ for cat <- [
       %{name: "Viagem", icon: "🧳"},
       %{name: "Música", icon: "🎸"}
     ] do
-  {:ok, _} = Manager.Categories.create_category(cat)
+  {:ok, _} = Manager.Transactions.create_category(cat)
+end
+
+for sup <- [
+      %{name: "Amazon"},
+      %{name: "Mineirão"},
+      %{name: "MAgazine Luiza"}
+    ] do
+  {:ok, _} = Manager.Transactions.create_supplier(sup)
 end

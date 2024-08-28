@@ -5,7 +5,8 @@ defmodule ManagerWeb.TransactionController do
   alias Manager.Transactions.Transaction
 
   def index(conn, _params) do
-    transactions = Transactions.list_transactions()
+    # user = conn.assigns.current_user
+    transactions = Transactions.list_transactions_by_user()
     render(conn, :index, transactions: transactions)
   end
 

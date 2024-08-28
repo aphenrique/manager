@@ -19,9 +19,8 @@ defmodule ManagerWeb.AccountController do
 
   def create(conn, %{"account" => account_params}) do
     user = conn.assigns.current_user
-    account = Map.put(account_params, "user_id", user.id)
 
-    case Accounts.create_account(account) do
+    case Accounts.create_account(user, account_params) do
       {:ok, account} ->
         conn
         |> put_flash(:info, "Account created successfully.")

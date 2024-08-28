@@ -1,21 +1,21 @@
 defmodule ManagerWeb.CategoryController do
   use ManagerWeb, :controller
 
-  alias Manager.Categories
-  alias Manager.Categories.Category
+  alias Manager.Transactions
+  alias Manager.Transactions.Category
 
   def index(conn, _params) do
-    categories = Categories.list_categories()
+    categories = Transactions.list_categories()
     render(conn, :index, categories: categories)
   end
 
   def new(conn, _params) do
-    changeset = Categories.change_category(%Category{})
+    changeset = Transactions.change_category(%Category{})
     render(conn, :new, changeset: changeset)
   end
 
   def create(conn, %{"category" => category_params}) do
-    case Categories.create_category(category_params) do
+    case Transactions.create_category(category_params) do
       {:ok} ->
         conn
         |> put_flash(:info, "Category created successfully.")
@@ -27,20 +27,20 @@ defmodule ManagerWeb.CategoryController do
   end
 
   def show(conn, %{"id" => id}) do
-    category = Categories.get_category!(id)
+    category = Transactions.get_category!(id)
     render(conn, :show, category: category)
   end
 
   def edit(conn, %{"id" => id}) do
-    category = Categories.get_category!(id)
-    changeset = Categories.change_category(category)
+    category = Transactions.get_category!(id)
+    changeset = Transactions.change_category(category)
     render(conn, :edit, category: category, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "category" => category_params}) do
-    category = Categories.get_category!(id)
+    category = Transactions.get_category!(id)
 
-    case Categories.update_category(category, category_params) do
+    case Transactions.update_category(category, category_params) do
       {:ok, category} ->
         conn
         |> put_flash(:info, "Category updated successfully.")
@@ -52,8 +52,8 @@ defmodule ManagerWeb.CategoryController do
   end
 
   def delete(conn, %{"id" => id}) do
-    category = Categories.get_category!(id)
-    {:ok, _category} = Categories.delete_category(category)
+    category = Transactions.get_category!(id)
+    {:ok, _category} = Transactions.delete_category(category)
 
     conn
     |> put_flash(:info, "Category deleted successfully.")

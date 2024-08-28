@@ -1,8 +1,6 @@
 defmodule ManagerWeb.TransactionJSON do
   alias Manager.Accounts.Account
-  alias Manager.Categories.Category
-  alias Manager.Suppliers.Supplier
-  alias Manager.Transactions.Transaction
+  alias Manager.Transactions.{Transaction, Category, Supplier}
 
   def index(%{transactions: transactions}) do
     %{

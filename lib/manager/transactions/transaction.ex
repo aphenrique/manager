@@ -1,7 +1,6 @@
 defmodule Manager.Transactions.Transaction do
   alias Manager.Accounts.Account
-  alias Manager.Categories.Category
-  alias Manager.Suppliers.Supplier
+  alias Manager.Transactions.{Category, Supplier}
 
   use Ecto.Schema
   import Ecto.Changeset
@@ -24,7 +23,7 @@ defmodule Manager.Transactions.Transaction do
     field :date, :date
     belongs_to :supplier, Supplier
     belongs_to :category, Category
-    belongs_to :account, Account
+    belongs_to :account, Account, foreign_key: :account_id, references: :id
     field :realized, :boolean, default: false
 
     timestamps(type: :utc_datetime)
@@ -33,7 +32,16 @@ defmodule Manager.Transactions.Transaction do
   @doc false
   def changeset(transaction, attrs) do
     transaction
-    |> cast(attrs, @fields)
+    |> cast(attrs, [
+      :name,
+      :type,
+      :value,
+      :date,
+      :supplier_id,
+      :category_id,
+      :account_id,
+      :realized
+    ])
     |> validate_required(@fields)
   end
 end

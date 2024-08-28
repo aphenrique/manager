@@ -1,5 +1,6 @@
 defmodule Manager.Users.User do
-  # alias Manager.Accounts.Account
+  alias Manager.Accounts.Account
+
   use Ecto.Schema
   import Ecto.Changeset
   @primary_key {:id, :binary_id, autogenerate: true}
@@ -10,7 +11,7 @@ defmodule Manager.Users.User do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
-    # has_many :accounts, Account
+    has_many :accounts, Account
 
     timestamps(type: :utc_datetime)
   end
@@ -58,9 +59,15 @@ defmodule Manager.Users.User do
     |> validate_required([:password])
     |> validate_length(:password, min: 8, max: 72)
     # Examples of additional password validation:
-    |> validate_format(:password, ~r/[a-z]/, message: "Deve haver, pelo menos, uma letra minúscula")
-    |> validate_format(:password, ~r/[A-Z]/, message: "Deve haver, pelo menos, uma letra maiúscula")
-    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "Deve haver, pelo menos, um caracter especial")
+    |> validate_format(:password, ~r/[a-z]/,
+      message: "Deve haver, pelo menos, uma letra minúscula"
+    )
+    |> validate_format(:password, ~r/[A-Z]/,
+      message: "Deve haver, pelo menos, uma letra maiúscula"
+    )
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
+      message: "Deve haver, pelo menos, um caracter especial"
+    )
     |> maybe_hash_password(opts)
   end
 

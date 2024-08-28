@@ -4,6 +4,7 @@ defmodule Manager.Accounts do
   alias Manager.Repo
 
   alias Manager.Accounts.Account
+  alias Manager.Transactions.Transaction
 
   def list_accounts() do
     Repo.all(Account)
@@ -11,11 +12,7 @@ defmodule Manager.Accounts do
   end
 
   def list_accounts_by_user(%User{} = user) do
-    Repo.all(
-      from a in Account,
-        where: a.user_id == ^user.id,
-        select: a
-    )
+    Repo.all(Ecto.assoc(user, :accounts))
   end
 
   def get_account!(id) do
@@ -23,8 +20,9 @@ defmodule Manager.Accounts do
     |> Repo.preload([:user])
   end
 
-  def create_account(attrs \\ %{}) do
-    %Account{}
+  def create_account(%User{} = user, attrs \\ %{}) do
+    user
+    |> Ecto.build_assoc(:accounts)
     |> Account.changeset(attrs)
     |> Repo.insert()
   end
@@ -33,6 +31,19 @@ defmodule Manager.Accounts do
     account
     |> Account.changeset(attrs)
     |> Repo.update()
+  end
+
+  def update_balance(%Transaction{} = transaction) do
+    value =
+      case transaction.type do
+        "out" -> transaction.value * -1
+        _ -> transaction.value
+      end
+
+    account = get_account!(transaction.account_id)
+    balance = account.balance + value
+
+    update_account(account, %{balance: balance})
   end
 
   def delete_account(%Account{} = account) do

@@ -1,5 +1,6 @@
 defmodule ManagerWeb.TransactionHTML do
   use ManagerWeb, :html
+  alias Manager.{Transactions, Accounts}
 
   embed_templates "transaction_html/*"
 
@@ -17,7 +18,7 @@ defmodule ManagerWeb.TransactionHTML do
       |> Ecto.Changeset.get_change(:categories, [])
       |> Enum.map(& &1.data.id)
 
-    for cat <- Manager.Categories.list_categories(),
+    for cat <- Transactions.list_categories(),
         do: [key: cat.name, value: cat.id, selected: cat.id in existing_ids]
   end
 
@@ -27,7 +28,7 @@ defmodule ManagerWeb.TransactionHTML do
       |> Ecto.Changeset.get_change(:suppliers, [])
       |> Enum.map(& &1.data.id)
 
-    for sup <- Manager.Suppliers.list_suppliers(),
+    for sup <- Transactions.list_suppliers(),
         do: [key: sup.name, value: sup.id, selected: sup.id in existing_ids]
   end
 
@@ -37,7 +38,7 @@ defmodule ManagerWeb.TransactionHTML do
       |> Ecto.Changeset.get_change(:accounts, [])
       |> Enum.map(& &1.data.id)
 
-    for acc <- Manager.Accounts.list_accounts(),
+    for acc <- Accounts.list_accounts(),
         do: [key: acc.name, value: acc.id, selected: acc.id in existing_ids]
   end
 end
