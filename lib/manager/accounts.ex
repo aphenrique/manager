@@ -3,6 +3,8 @@ defmodule Manager.Accounts do
   alias Manager.Users.User
   alias Manager.Repo
 
+  alias Decimal
+
   alias Manager.Accounts.Account
   alias Manager.Transactions.Transaction
 
@@ -31,6 +33,20 @@ defmodule Manager.Accounts do
     account
     |> Account.changeset(attrs)
     |> Repo.update()
+  end
+
+  def consolidate_balance(account_id) do
+    transactions = Repo.all(from t in Transaction, where: t.account_id == ^account_id)
+
+    total_balance = Enum.reduce(transactions, Decimal.new(0), fn transaction, acc ->
+      value = case transaction.type do
+        "out" -> Decimal.negate(transaction.value)
+        _ -> transaction.value
+      end
+      Decimal.add(acc, value)
+    end)
+
+    {:ok, total_balance}
   end
 
   def update_balance(%Transaction{} = transaction) do

@@ -1,18 +1,25 @@
 defmodule ManagerWeb.TransactionController do
   use ManagerWeb, :controller
 
+  alias Manager.Accounts
   alias Manager.Transactions
   alias Manager.Transactions.Transaction
 
   def index(conn, _params) do
-    # user = conn.assigns.current_user
-    transactions = Transactions.list_transactions_by_user()
+    transactions =
+      conn.assigns.current_user
+      |> Transactions.list_transactions_by_user()
+
     render(conn, :index, transactions: transactions)
   end
 
   def new(conn, _params) do
+    accounts =
+      conn.assigns.current_user
+      |> Accounts.list_accounts_by_user()
+
     changeset = Transactions.change_transaction(%Transaction{})
-    render(conn, :new, changeset: changeset)
+    render(conn, :new, changeset: changeset, accounts: accounts)
   end
 
   def create(conn, %{"transaction" => transaction_params}) do
@@ -33,9 +40,13 @@ defmodule ManagerWeb.TransactionController do
   end
 
   def edit(conn, %{"id" => id}) do
+    accounts =
+      conn.assigns.current_user
+      |> Accounts.list_accounts_by_user()
+
     transaction = Transactions.get_transaction!(id)
     changeset = Transactions.change_transaction(transaction)
-    render(conn, :edit, transaction: transaction, changeset: changeset)
+    render(conn, :edit, transaction: transaction, changeset: changeset, accounts: accounts)
   end
 
   def update(conn, %{"id" => id, "transaction" => transaction_params}) do

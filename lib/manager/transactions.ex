@@ -4,14 +4,33 @@ defmodule Manager.Transactions do
 
   alias Manager.Transactions.{Transaction, Category, Supplier}
   alias Manager.Accounts
+  alias Manager.Accounts.Account
+  alias Manager.Users.User
 
   def list_transactions() do
     Repo.all(Transaction)
     |> Repo.preload([:category, :supplier, :account])
   end
 
-  def list_transactions_by_user() do
-    Repo.all(Transaction)
+  def list_transactions_by_user(%User{} = user) do
+    query =
+      from t in Transaction,
+        join: a in Account,
+        on: t.account_id == a.id,
+        where: a.user_id == ^user.id
+
+    Repo.all(query)
+    |> Repo.preload([:category, :supplier, :account])
+  end
+
+  def list_transactions_by_account_id(account_id) do
+    query =
+      from t in Transaction,
+        join: a in Account,
+        on: t.account_id == a.id,
+        where: a.account_id == ^account_id
+
+    Repo.all(query)
     |> Repo.preload([:category, :supplier, :account])
   end
 
@@ -22,7 +41,8 @@ defmodule Manager.Transactions do
 
   def create_transaction(attrs \\ %{}) do
     result =
-      %Transaction{}
+      Accounts.get_account!(attrs["account_id"])
+      |> Ecto.build_assoc(:transactions)
       |> Transaction.changeset(attrs)
       |> Repo.insert()
 
@@ -30,12 +50,29 @@ defmodule Manager.Transactions do
       {:ok, transaction} ->
         Accounts.update_balance(transaction)
     end
+
+    result
   end
 
   def update_transaction(%Transaction{} = transaction, attrs) do
-    transaction
-    |> Transaction.changeset(attrs)
-    |> Repo.update()
+    new_value = attrs["value"] - transaction.value
+
+    result =
+      Accounts.get_account!(attrs["account_id"])
+      |> Ecto.build_assoc(:transactions)
+      |> Transaction.changeset(attrs)
+      |> Repo.update()
+
+    case result do
+      {:ok, transaction} ->
+        Accounts.update_balance(transaction)
+    end
+
+    result
+
+    # transaction
+    # |> Transaction.changeset(attrs)
+    # |> Repo.update()
   end
 
   def delete_transaction(%Transaction{} = transaction) do

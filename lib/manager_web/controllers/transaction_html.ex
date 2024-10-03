@@ -1,6 +1,6 @@
 defmodule ManagerWeb.TransactionHTML do
   use ManagerWeb, :html
-  alias Manager.{Transactions, Accounts}
+  alias Manager.{Transactions}
 
   embed_templates "transaction_html/*"
 
@@ -8,6 +8,7 @@ defmodule ManagerWeb.TransactionHTML do
   Renders a transaction form.
   """
   attr :changeset, Ecto.Changeset, required: true
+  attr :accounts, :list, required: true
   attr :action, :string, required: true
 
   def transaction_form(assigns)
@@ -32,13 +33,13 @@ defmodule ManagerWeb.TransactionHTML do
         do: [key: sup.name, value: sup.id, selected: sup.id in existing_ids]
   end
 
-  def account_opts(changeset) do
+  def account_opts(changeset, accounts) do
     existing_ids =
       changeset
       |> Ecto.Changeset.get_change(:accounts, [])
       |> Enum.map(& &1.data.id)
 
-    for acc <- Accounts.list_accounts(),
+    for acc <- accounts,
         do: [key: acc.name, value: acc.id, selected: acc.id in existing_ids]
   end
 end
