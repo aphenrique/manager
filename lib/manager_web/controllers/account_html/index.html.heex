@@ -10,7 +10,7 @@
 <.table id="accounts" rows={@accounts} row_click={&JS.navigate(~p"/accounts/#{&1}")}>
   <:col :let={account} label="Name"><%= account.name %></:col>
   <:col :let={account} label="Type"><%= account.type %></:col>
-  <:col :let={account} label="Balance"><%= account.balance %></:col>
+  <:col :let={account} label="Balance">$<.balance_mask balance={account.balance} /></:col>
   <:action :let={account}>
     <div class="sr-only">
       <.link navigate={~p"/accounts/#{account}"}>Show</.link>
@@ -20,6 +20,11 @@
   <:action :let={account}>
     <.link href={~p"/accounts/#{account}"} method="delete" data-confirm="Are you sure?">
       Delete
+    </.link>
+  </:action>
+  <:action :let={account}>
+    <.link href={~p"/accounts/#{account}/consolidate"} method="get" data-confirm="Tem certeza que deseja consolidar esta conta?">
+      Consolidar
     </.link>
   </:action>
 </.table>

@@ -38,28 +38,39 @@ defmodule Manager.Accounts do
   def consolidate_balance(account_id) do
     transactions = Repo.all(from t in Transaction, where: t.account_id == ^account_id)
 
-    total_balance = Enum.reduce(transactions, Decimal.new(0), fn transaction, acc ->
-      value = case transaction.type do
-        "out" -> Decimal.negate(transaction.value)
-        _ -> transaction.value
-      end
-      Decimal.add(acc, value)
-    end)
+    total_balance =
+      Enum.reduce(transactions, 0, fn transaction, acc ->
+        value =
+          case transaction.type do
+            "out" -> -transaction.value
+            _ -> transaction.value
+          end
 
-    {:ok, total_balance}
+        acc + value
+      end)
+
+    case get_account!(account_id)
+    |> update_account(%{balance: total_balance}) do
+      {:ok, _} -> {:ok, total_balance}
+
+      {:error, reason} -> {:error, reason}
+    end
   end
 
   def update_balance(%Transaction{} = transaction) do
     value =
       case transaction.type do
-        "out" -> transaction.value * -1
+        "out" -> -transaction.value
         _ -> transaction.value
       end
 
     account = get_account!(transaction.account_id)
     balance = account.balance + value
 
-    update_account(account, %{balance: balance})
+    case update_account(account, %{balance: balance}) do
+      {:ok, updated_account} -> {:ok, updated_account}
+      {:error, changeset} -> {:error, changeset.errors}
+    end
   end
 
   def delete_account(%Account{} = account) do

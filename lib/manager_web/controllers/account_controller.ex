@@ -56,6 +56,21 @@ defmodule ManagerWeb.AccountController do
     end
   end
 
+
+  def consolidate_account(conn, %{"id" => account_id}) do
+    case Accounts.consolidate_balance(account_id) do
+      {:ok, _} ->
+        conn
+        |> put_flash(:info, "Conta consolidada com sucesso.")
+        |> redirect(to: ~p"/accounts")
+
+      {:error, reason} ->
+        conn
+        |> put_status(:unprocessable_entity)
+        |> json(%{error: reason})
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     account = Accounts.get_account!(id)
     {:ok, _account} = Accounts.delete_account(account)

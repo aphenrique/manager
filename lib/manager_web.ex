@@ -76,6 +76,8 @@ defmodule ManagerWeb do
 
       # Include general helpers for rendering HTML
       unquote(html_helpers())
+
+      import ManagerWeb.BalanceMaskComponent
     end
   end
 

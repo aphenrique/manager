@@ -69,6 +69,7 @@ defmodule ManagerWeb.Router do
     get "/users/settings", UserSettingsController, :edit
     put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+    get "/accounts/:id/consolidate", AccountController, :consolidate_account
 
     resources "/categories", CategoryController
     resources "/suppliers", SupplierController
