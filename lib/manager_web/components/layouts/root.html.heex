@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html lang="en" class="[scrollbar-gutter:stable] dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -12,6 +12,40 @@
     </script>
   </head>
   <header class="py-4">
+    <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-4 lg:px-6 justify-start">
+      <li>
+        <.link
+          href={~p"/accounts"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+        >
+          Accounts
+        </.link>
+      </li>
+      <li>
+        <.link
+          href={~p"/transactions"}
+          class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+        >
+          Transactions
+        </.link>
+      </li>
+    </ul>
+    <li>
+      <.link
+        href={~p"/categories"}
+        class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+      >
+        Categories
+      </.link>
+    </li>
+    <li>
+      <.link
+        href={~p"/suppliers"}
+        class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+      >
+        Suppliers
+      </.link>
+    </li>
     <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-4 lg:px-6 justify-end">
       <%= if @current_user do %>
         <li class="text-[0.8125rem] leading-6 text-zinc-900">

@@ -4,7 +4,7 @@ import Config
 config :manager, Manager.Repo,
   username: "postgres",
   password: "postgres",
-  hostname: "localhost",
+  hostname: "db",
   database: "manager_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,

@@ -1,17 +1,19 @@
 services:
 
   # app:
-  #   image: aphenrique/manager_dev:v1
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   command: /bin/bash scripts/start
-  #   ports:
-  #     - "4000:4000"
+  #   build: .
   #   depends_on:
   #     - db
+  #   environment:
+  #     MIX_ENV: dev
+  #   platform: linux/amd64
+  #   container_name: manager_dev
+  #   ports:
+  #     - "4000:4000"
   #   links:
   #     - db
+  #   volumes:
+  #     - .:/opt/app
 
   db:
     image: bitnami/postgresql:latest

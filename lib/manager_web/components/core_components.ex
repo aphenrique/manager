@@ -1,18 +1,18 @@
 defmodule ManagerWeb.CoreComponents do
   @moduledoc """
-  Provides core UI components.
+  Fornece componentes de UI principais.
 
-  At first glance, this module may seem daunting, but its goal is to provide
-  core building blocks for your application, such as modals, tables, and
-  forms. The components consist mostly of markup and are well-documented
-  with doc strings and declarative assigns. You may customize and style
-  them in any way you want, based on your application growth and needs.
+  À primeira vista, este módulo pode parecer intimidador, mas seu objetivo é fornecer
+  blocos de construção fundamentais para sua aplicação, como modais, tabelas e
+  formulários. Os componentes consistem principalmente de marcação e são bem documentados
+  com strings de documentação e atributos declarativos. Você pode personalizá-los e estilizá-los
+  de qualquer maneira que desejar, com base no crescimento e nas necessidades da sua aplicação.
 
-  The default components use Tailwind CSS, a utility-first CSS framework.
-  See the [Tailwind CSS documentation](https://tailwindcss.com) to learn
-  how to customize them or feel free to swap in another framework altogether.
+  Os componentes padrão usam Tailwind CSS, um framework CSS utilitário.
+  Veja a [documentação do Tailwind CSS](https://tailwindcss.com) para aprender
+  como personalizá-los ou sinta-se à vontade para trocar por outro framework completamente.
 
-  Icons are provided by [heroicons](https://heroicons.com). See `icon/1` for usage.
+  Ícones são fornecidos por [heroicons](https://heroicons.com). Veja `icon/1` para uso.
   """
   use Phoenix.Component
 
@@ -20,19 +20,19 @@ defmodule ManagerWeb.CoreComponents do
   import ManagerWeb.Gettext
 
   @doc """
-  Renders a modal.
+  Renderiza um modal.
 
-  ## Examples
+  ## Exemplos
 
-      <.modal id="confirm-modal">
-        This is a modal.
+      <.modal id="confirmar-modal">
+        Isto é um modal.
       </.modal>
 
-  JS commands may be passed to the `:on_cancel` to configure
-  the closing/cancel event, for example:
+  Comandos JS podem ser passados para `:on_cancel` para configurar
+  o evento de fechamento/cancelamento, por exemplo:
 
-      <.modal id="confirm" on_cancel={JS.navigate(~p"/posts")}>
-        This is another modal.
+      <.modal id="confirmar" on_cancel={JS.navigate(~p"/posts")}>
+        Este é outro modal.
       </.modal>
 
   """
@@ -73,7 +73,7 @@ defmodule ManagerWeb.CoreComponents do
                   phx-click={JS.exec("data-cancel", to: "##{@id}")}
                   type="button"
                   class="-m-3 flex-none p-3 opacity-20 hover:opacity-40"
-                  aria-label={gettext("close")}
+                  aria-label={gettext("fechar")}
                 >
                   <.icon name="hero-x-mark-solid" class="h-5 w-5" />
                 </button>
@@ -90,20 +90,20 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders flash notices.
+  Renderiza avisos flash.
 
-  ## Examples
+  ## Exemplos
 
       <.flash kind={:info} flash={@flash} />
-      <.flash kind={:info} phx-mounted={show("#flash")}>Welcome Back!</.flash>
+      <.flash kind={:info} phx-mounted={show("#flash")}>Bem-vindo de volta!</.flash>
   """
-  attr :id, :string, doc: "the optional id of flash container"
-  attr :flash, :map, default: %{}, doc: "the map of flash messages to display"
+  attr :id, :string, doc: "o id opcional do contêiner flash"
+  attr :flash, :map, default: %{}, doc: "o mapa de mensagens flash para exibir"
   attr :title, :string, default: nil
-  attr :kind, :atom, values: [:info, :error], doc: "used for styling and flash lookup"
-  attr :rest, :global, doc: "the arbitrary HTML attributes to add to the flash container"
+  attr :kind, :atom, values: [:info, :error], doc: "usado para estilização e busca de flash"
+  attr :rest, :global, doc: "os atributos HTML arbitrários para adicionar ao contêiner flash"
 
-  slot :inner_block, doc: "the optional inner block that renders the flash message"
+  slot :inner_block, doc: "o bloco interno opcional que renderiza a mensagem flash"
 
   def flash(assigns) do
     assigns = assign_new(assigns, :id, fn -> "flash-#{assigns.kind}" end)
@@ -127,7 +127,7 @@ defmodule ManagerWeb.CoreComponents do
         <%= @title %>
       </p>
       <p class="mt-2 text-sm leading-5"><%= msg %></p>
-      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("close")}>
+      <button type="button" class="group absolute top-1 right-1 p-2" aria-label={gettext("fechar")}>
         <.icon name="hero-x-mark-solid" class="h-5 w-5 opacity-40 group-hover:opacity-70" />
       </button>
     </div>
@@ -135,41 +135,41 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Shows the flash group with standard titles and content.
+  Mostra o grupo flash com títulos e conteúdo padrão.
 
-  ## Examples
+  ## Exemplos
 
       <.flash_group flash={@flash} />
   """
-  attr :flash, :map, required: true, doc: "the map of flash messages"
-  attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
+  attr :flash, :map, required: true, doc: "o mapa de mensagens flash"
+  attr :id, :string, default: "flash-group", doc: "o id opcional do contêiner flash"
 
   def flash_group(assigns) do
     ~H"""
     <div id={@id}>
-      <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
-      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+      <.flash kind={:info} title={gettext("Sucesso!")} flash={@flash} />
+      <.flash kind={:error} title={gettext("Erro!")} flash={@flash} />
       <.flash
         id="client-error"
         kind={:error}
-        title={gettext("We can't find the internet")}
+        title={gettext("Não conseguimos encontrar a internet")}
         phx-disconnected={show(".phx-client-error #client-error")}
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        <%= gettext("Tentando reconectar") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
       <.flash
         id="server-error"
         kind={:error}
-        title={gettext("Something went wrong!")}
+        title={gettext("Algo deu errado!")}
         phx-disconnected={show(".phx-server-error #server-error")}
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        <%= gettext("Aguente firme enquanto voltamos aos trilhos") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -177,32 +177,35 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders a simple form.
+  Renderiza um formulário simples.
 
-  ## Examples
+  ## Exemplos
 
-      <.simple_form for={@form} phx-change="validate" phx-submit="save">
+      <.simple_form for={@form} phx-change="validar" phx-submit="salvar">
         <.input field={@form[:email]} label="Email"/>
-        <.input field={@form[:username]} label="Username" />
+        <.input field={@form[:username]} label="Nome de usuário" />
         <:actions>
-          <.button>Save</.button>
+          <.button>Salvar</.button>
         </:actions>
       </.simple_form>
   """
-  attr :for, :any, required: true, doc: "the data structure for the form"
-  attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
+  attr :for, :any, required: true, doc: "a estrutura de dados para o formulário"
+
+  attr :as, :any,
+    default: nil,
+    doc: "o parâmetro do lado do servidor para coletar todas as entradas"
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
-    doc: "the arbitrary HTML attributes to apply to the form tag"
+    doc: "os atributos HTML arbitrários para aplicar à tag do formulário"
 
   slot :inner_block, required: true
-  slot :actions, doc: "the slot for form actions, such as a submit button"
+  slot :actions, doc: "o slot para ações do formulário, como um botão de envio"
 
   def simple_form(assigns) do
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+      <div class="mt-10 space-y-8 bg-gray-800 p-6 rounded-lg">
         <%= render_slot(@inner_block, f) %>
         <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
           <%= render_slot(action, f) %>
@@ -213,12 +216,12 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders a button.
+  Renderiza um botão.
 
-  ## Examples
+  ## Exemplos
 
-      <.button>Send!</.button>
-      <.button phx-click="go" class="ml-2">Send!</.button>
+      <.button>Enviar!</.button>
+      <.button phx-click="ir" class="ml-2">Enviar!</.button>
   """
   attr :type, :string, default: nil
   attr :class, :string, default: nil
@@ -231,7 +234,7 @@ defmodule ManagerWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
+        "phx-submit-loading:opacity-75 rounded-lg bg-indigo-600 hover:bg-indigo-700 py-2 px-3",
         "text-sm font-semibold leading-6 text-white active:text-white/80",
         @class
       ]}
@@ -243,30 +246,30 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders an input with label and error messages.
+  Renderiza uma entrada com rótulo e mensagens de erro.
 
-  A `Phoenix.HTML.FormField` may be passed as argument,
-  which is used to retrieve the input name, id, and values.
-  Otherwise all attributes may be passed explicitly.
+  Um `Phoenix.HTML.FormField` pode ser passado como argumento,
+  que é usado para recuperar o nome, id e valores da entrada.
+  Caso contrário, todos os atributos podem ser passados explicitamente.
 
-  ## Types
+  ## Tipos
 
-  This function accepts all HTML input types, considering that:
+  Esta função aceita todos os tipos de entrada HTML, considerando que:
 
-    * You may also set `type="select"` to render a `<select>` tag
+    * Você também pode definir `type="select"` para renderizar uma tag `<select>`
 
-    * `type="checkbox"` is used exclusively to render boolean values
+    * `type="checkbox"` é usado exclusivamente para renderizar valores booleanos
 
-    * For live file uploads, see `Phoenix.Component.live_file_input/1`
+    * Para uploads de arquivos ao vivo, veja `Phoenix.Component.live_file_input/1`
 
-  See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
-  for more information. Unsupported types, such as hidden and radio,
-  are best written directly in your templates.
+  Veja https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input
+  para mais informações. Tipos não suportados, como hidden e radio,
+  são melhor escritos diretamente em seus templates.
 
-  ## Examples
+  ## Exemplos
 
       <.input field={@form[:email]} type="email" />
-      <.input name="my-input" errors={["oh no!"]} />
+      <.input name="minha-entrada" errors={["oh não!"]} />
   """
   attr :id, :any, default: nil
   attr :name, :any
@@ -279,13 +282,14 @@ defmodule ManagerWeb.CoreComponents do
                range search select tel text textarea time url week)
 
   attr :field, Phoenix.HTML.FormField,
-    doc: "a form field struct retrieved from the form, for example: @form[:email]"
+    doc:
+      "uma estrutura de campo de formulário recuperada do formulário, por exemplo: @form[:email]"
 
   attr :errors, :list, default: []
-  attr :checked, :boolean, doc: "the checked flag for checkbox inputs"
-  attr :prompt, :string, default: nil, doc: "the prompt for select inputs"
-  attr :options, :list, doc: "the options to pass to Phoenix.HTML.Form.options_for_select/2"
-  attr :multiple, :boolean, default: false, doc: "the multiple flag for select inputs"
+  attr :checked, :boolean, doc: "a flag checked para entradas de checkbox"
+  attr :prompt, :string, default: nil, doc: "o prompt para entradas select"
+  attr :options, :list, doc: "as opções para passar para Phoenix.HTML.Form.options_for_select/2"
+  attr :multiple, :boolean, default: false, doc: "a flag multiple para entradas select"
 
   attr :rest, :global,
     include: ~w(accept autocomplete capture cols disabled form list max maxlength min minlength
@@ -366,19 +370,20 @@ defmodule ManagerWeb.CoreComponents do
     """
   end
 
-  # All other inputs text, datetime-local, url, password, etc. are handled here...
+  # Todas as outras entradas de texto, datetime-local, url, password, etc. são tratadas aqui...
   def input(assigns) do
     ~H"""
-    <div>
+    <div phx-feedback-for={@name}>
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
         name={@name}
-        id={@id}
+        id={@id || @name}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
+          "mt-2 block w-full rounded-lg text-gray-300 focus:ring-0 sm:text-sm sm:leading-6",
+          "phx-no-feedback:border-gray-700 phx-no-feedback:focus:border-indigo-500",
+          "bg-gray-800 border-gray-700",
           @errors != [] && "border-rose-400 focus:border-rose-400"
         ]}
         {@rest}
@@ -389,7 +394,7 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders a label.
+  Renderiza um rótulo.
   """
   attr :for, :string, default: nil
   slot :inner_block, required: true
@@ -403,7 +408,7 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Generates a generic error message.
+  Gera uma mensagem de erro genérica.
   """
   slot :inner_block, required: true
 
@@ -417,7 +422,7 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders a header with title.
+  Renderiza um cabeçalho com título.
   """
   attr :class, :string, default: nil
 
@@ -429,10 +434,10 @@ defmodule ManagerWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", @class]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8 text-zinc-800">
+        <h1 class="text-lg font-semibold leading-8 text-gray-100">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-gray-400">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -442,29 +447,29 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc ~S"""
-  Renders a table with generic styling.
+  Renderiza uma tabela com estilo genérico.
 
-  ## Examples
+  ## Exemplos
 
-      <.table id="users" rows={@users}>
-        <:col :let={user} label="id"><%= user.id %></:col>
-        <:col :let={user} label="username"><%= user.username %></:col>
+      <.table id="usuarios" rows={@usuarios}>
+        <:col :let={usuario} label="id"><%= usuario.id %></:col>
+        <:col :let={usuario} label="nome de usuário"><%= usuario.username %></:col>
       </.table>
   """
   attr :id, :string, required: true
   attr :rows, :list, required: true
-  attr :row_id, :any, default: nil, doc: "the function for generating the row id"
-  attr :row_click, :any, default: nil, doc: "the function for handling phx-click on each row"
+  attr :row_id, :any, default: nil, doc: "a função para gerar o id da linha"
+  attr :row_click, :any, default: nil, doc: "a função para lidar com phx-click em cada linha"
 
   attr :row_item, :any,
     default: &Function.identity/1,
-    doc: "the function for mapping each row before calling the :col and :action slots"
+    doc: "a função para mapear cada linha antes de chamar os slots :col e :action"
 
   slot :col, required: true do
     attr :label, :string
   end
 
-  slot :action, doc: "the slot for showing user actions in the last table column"
+  slot :action, doc: "o slot para mostrar ações do usuário na última coluna da tabela"
 
   def table(assigns) do
     assigns =
@@ -474,39 +479,39 @@ defmodule ManagerWeb.CoreComponents do
 
     ~H"""
     <div class="overflow-y-auto px-4 sm:overflow-visible sm:px-0">
-      <table class="w-[40rem] mt-11 sm:w-full">
-        <thead class="text-sm text-left leading-6 text-zinc-500">
+      <table class="w-[40rem] p-8 mt-11 sm:w-full bg-gray-800 text-gray-300">
+        <thead class="text-sm text-left leading-6 text-gray-400">
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= gettext("Actions") %></span>
+              <span class="sr-only"><%= gettext("Ações") %></span>
             </th>
           </tr>
         </thead>
         <tbody
           id={@id}
           phx-update={match?(%Phoenix.LiveView.LiveStream{}, @rows) && "stream"}
-          class="relative divide-y divide-zinc-100 border-t border-zinc-200 text-sm leading-6 text-zinc-700"
+          class="relative divide-y divide-gray-700 border-t border-gray-700 text-sm leading-6 text-gray-300"
         >
-          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-zinc-50">
+          <tr :for={row <- @rows} id={@row_id && @row_id.(row)} class="group hover:bg-gray-700">
             <td
               :for={{col, i} <- Enum.with_index(@col)}
               phx-click={@row_click && @row_click.(row)}
               class={["relative p-0", @row_click && "hover:cursor-pointer"]}
             >
               <div class="block py-4 pr-6">
-                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-zinc-50 sm:rounded-l-xl" />
-                <span class={["relative", i == 0 && "font-semibold text-zinc-900"]}>
+                <span class="absolute -inset-y-px right-0 -left-4 group-hover:bg-gray-700 sm:rounded-l-xl" />
+                <span class={["relative", i == 0 && "font-semibold text-gray-100"]}>
                   <%= render_slot(col, @row_item.(row)) %>
                 </span>
               </div>
             </td>
             <td :if={@action != []} class="relative w-14 p-0">
               <div class="relative whitespace-nowrap py-4 text-right text-sm font-medium">
-                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-zinc-50 sm:rounded-r-xl" />
+                <span class="absolute -inset-y-px -right-4 left-0 group-hover:bg-gray-700 sm:rounded-r-xl" />
                 <span
                   :for={action <- @action}
-                  class="relative ml-4 font-semibold leading-6 text-zinc-900 hover:text-zinc-700"
+                  class="relative ml-4 font-semibold leading-6 text-gray-100 hover:text-gray-300"
                 >
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
@@ -520,13 +525,13 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders a data list.
+  Renderiza uma lista de dados.
 
-  ## Examples
+  ## Exemplos
 
       <.list>
-        <:item title="Title"><%= @post.title %></:item>
-        <:item title="Views"><%= @post.views %></:item>
+        <:item title="Título"><%= @post.title %></:item>
+        <:item title="Visualizações"><%= @post.views %></:item>
       </.list>
   """
   slot :item, required: true do
@@ -535,8 +540,8 @@ defmodule ManagerWeb.CoreComponents do
 
   def list(assigns) do
     ~H"""
-    <div class="mt-14">
-      <dl class="-my-4 divide-y divide-zinc-100">
+    <div class="mt-14 p-8">
+      <dl class="-my-4 p-8 divide-y divide-zinc-100">
         <div :for={item <- @item} class="flex gap-4 py-4 text-sm leading-6 sm:gap-8">
           <dt class="w-1/4 flex-none text-zinc-500"><%= item.title %></dt>
           <dd class="text-zinc-700"><%= render_slot(item) %></dd>
@@ -547,11 +552,11 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders a back navigation link.
+  Renderiza um link de navegação para trás.
 
-  ## Examples
+  ## Exemplos
 
-      <.back navigate={~p"/posts"}>Back to posts</.back>
+      <.back navigate={~p"/posts"}>Voltar para posts</.back>
   """
   attr :navigate, :any, required: true
   slot :inner_block, required: true
@@ -571,19 +576,19 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Renders a [Heroicon](https://heroicons.com).
+  Renderiza um [Heroicon](https://heroicons.com).
 
-  Heroicons come in three styles – outline, solid, and mini.
-  By default, the outline style is used, but solid and mini may
-  be applied by using the `-solid` and `-mini` suffix.
+  Heroicons vêm em três estilos – outline, solid e mini.
+  Por padrão, o estilo outline é usado, mas solid e mini podem
+  ser aplicados usando os sufixos `-solid` e `-mini`.
 
-  You can customize the size and colors of the icons by setting
-  width, height, and background color classes.
+  Você pode personalizar o tamanho e as cores dos ícones definindo
+  largura, altura e cores de fundo.
 
-  Icons are extracted from the `deps/heroicons` directory and bundled within
-  your compiled app.css by the plugin in your `assets/tailwind.config.js`.
+  Ícones são extraídos do diretório `deps/heroicons` e embutidos dentro
+  do seu arquivo compilado app.css pelo plugin em seu `assets/tailwind.config.js`.
 
-  ## Examples
+  ## Exemplos
 
       <.icon name="hero-x-mark-solid" />
       <.icon name="hero-arrow-path" class="ml-1 w-3 h-3 animate-spin" />
@@ -647,19 +652,19 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Translates an error message using gettext.
+  Traduz uma mensagem de erro usando gettext.
   """
   def translate_error({msg, opts}) do
-    # When using gettext, we typically pass the strings we want
-    # to translate as a static argument:
+    # Quando usamos gettext, normalmente passamos as strings que queremos
+    # traduzir como um argumento estático:
     #
-    #     # Translate the number of files with plural rules
+    #     # Traduz o número de arquivos com regras de plural
     #     dngettext("errors", "1 file", "%{count} files", count)
     #
-    # However the error messages in our forms and APIs are generated
-    # dynamically, so we need to translate them by calling Gettext
-    # with our gettext backend as first argument. Translations are
-    # available in the errors.po file (as we use the "errors" domain).
+    # No entanto, as mensagens de erro em nossos formulários e APIs são geradas
+    # dinamicamente, então precisamos traduzi-las chamando Gettext
+    # com nosso backend gettext como primeiro argumento. Traduções
+    # estão disponíveis no arquivo errors.po (já que usamos o domínio "errors").
     if count = opts[:count] do
       Gettext.dngettext(ManagerWeb.Gettext, "errors", msg, msg, count, opts)
     else
@@ -668,7 +673,7 @@ defmodule ManagerWeb.CoreComponents do
   end
 
   @doc """
-  Translates the errors for a field from a keyword list of errors.
+  Traduz os erros de um campo de uma lista de chave-valor de erros.
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
