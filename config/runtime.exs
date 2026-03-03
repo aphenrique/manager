@@ -28,6 +28,10 @@ if telegram_token = System.get_env("TELEGRAM_BOT_TOKEN") do
   config :ex_gram, token: telegram_token
 end
 
+if chat_id = System.get_env("TELEGRAM_ALLOWED_CHAT_ID") do
+  config :manager, :telegram_allowed_chat_id, chat_id
+end
+
 if config_env() == :prod do
   database_path =
     System.get_env("DATABASE_PATH") ||

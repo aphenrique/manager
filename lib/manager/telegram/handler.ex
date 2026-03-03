@@ -159,15 +159,17 @@ defmodule Manager.Telegram.Handler do
   defp put_destination(attrs, :account, dest), do: Map.put(attrs, :account_id, dest.id)
   defp put_destination(attrs, :credit_card, dest), do: Map.put(attrs, :credit_card_id, dest.id)
 
+  @max_amount Decimal.new("99999999.99")
+
   defp parse_amount(str) do
     str = String.replace(str, ",", ".")
 
     case Decimal.parse(str) do
       {decimal, ""} ->
-        if Decimal.compare(decimal, Decimal.new(0)) == :gt do
-          {:ok, decimal}
-        else
-          :invalid_amount
+        cond do
+          Decimal.compare(decimal, Decimal.new(0)) != :gt -> :invalid_amount
+          Decimal.compare(decimal, @max_amount) == :gt -> :invalid_amount
+          true -> {:ok, decimal}
         end
 
       _ ->
