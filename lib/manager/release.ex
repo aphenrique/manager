@@ -15,26 +15,28 @@ defmodule Manager.Release do
 
   def create_user(email, password) do
     load_app()
-    Application.ensure_all_started(@app)
 
-    case Manager.Accounts.register_user(%{email: email, password: password}) do
-      {:ok, user} ->
-        IO.puts("User created: #{user.email}")
+    {:ok, _, _} =
+      Ecto.Migrator.with_repo(Manager.Repo, fn _repo ->
+        case Manager.Accounts.register_user(%{email: email, password: password}) do
+          {:ok, user} ->
+            IO.puts("User created: #{user.email}")
 
-      {:error, changeset} ->
-        errors =
-          Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
-            Enum.reduce(opts, msg, fn {key, value}, acc ->
-              String.replace(acc, "%{#{key}}", to_string(value))
+          {:error, changeset} ->
+            errors =
+              Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+                Enum.reduce(opts, msg, fn {key, value}, acc ->
+                  String.replace(acc, "%{#{key}}", to_string(value))
+                end)
+              end)
+
+            IO.puts("Failed to create user:")
+
+            Enum.each(errors, fn {field, msgs} ->
+              IO.puts("  #{field}: #{Enum.join(msgs, ", ")}")
             end)
-          end)
-
-        IO.puts("Failed to create user:")
-
-        Enum.each(errors, fn {field, msgs} ->
-          IO.puts("  #{field}: #{Enum.join(msgs, ", ")}")
-        end)
-    end
+        end
+      end)
   end
 
   def rollback(repo, version) do
