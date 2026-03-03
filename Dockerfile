@@ -1,5 +1,5 @@
 # ── Stage 1: Builder ──────────────────────────────────────────
-FROM hexpm/elixir:1.19.4-erlang-28.2-alpine-3.21.3 AS builder   
+FROM hexpm/elixir:1.19.4-erlang-28.3.3-alpine-3.22.3 AS builder   
 
 RUN apk add --no-cache build-base git curl  
 
@@ -33,7 +33,7 @@ COPY rel rel
 RUN mix release 
 
 # ── Stage 2: Runtime ──────────────────────────────────────────
-FROM alpine:3.21 AS runtime   
+FROM alpine:3.22 AS runtime   
 
 RUN apk add --no-cache libstdc++ openssl ncurses-libs sqlite
 
