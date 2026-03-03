@@ -16,16 +16,15 @@ RUN mix deps.get --only prod
 COPY config/config.exs config/prod.exs config/
 RUN mix deps.compile
 
-# Build de assets (Tailwind + esbuild)  
+# Compila a aplicação (gera phoenix-colocated/manager no build path)
 COPY priv priv
-COPY assets assets  
+COPY lib lib
+RUN mix compile
+
+# Build de assets (Tailwind + esbuild)
+COPY assets assets
 RUN mix assets.setup
-RUN mix assets.deploy   
-
-# Compila a aplicação   
-COPY lib lib  
-
-RUN mix compile 
+RUN mix assets.deploy
 
 # Gera o release
 COPY config/runtime.exs config/   
