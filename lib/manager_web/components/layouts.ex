@@ -75,7 +75,7 @@ defmodule ManagerWeb.Layouts do
       <main class="flex-1 overflow-y-auto bg-base-100">
         <.flash_group flash={@flash} />
         <div class="p-6">
-          {@inner_content}
+          {render_slot(@inner_block)}
         </div>
       </main>
     </div>
