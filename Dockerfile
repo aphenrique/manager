@@ -34,24 +34,22 @@ RUN mix release
 # ── Stage 2: Runtime ──────────────────────────────────────────
 FROM alpine:3.22 AS runtime   
 
-RUN apk add --no-cache libstdc++ openssl ncurses-libs sqlite
+RUN apk add --no-cache libstdc++ openssl ncurses-libs sqlite su-exec
 
-WORKDIR /app  
+WORKDIR /app
 
 RUN addgroup -S app && adduser -S app -G app
+RUN mkdir -p /app/data
 
-RUN mkdir -p /app/data && chown app:app /app/data 
+COPY --from=builder /app/_build/prod/rel/manager ./
+RUN chmod +x /app/bin/entrypoint.sh
 
-COPY --from=builder --chown=app:app /app/_build/prod/rel/manager ./
-
-USER app  
-
-ENV HOME=/app 
-ENV PHX_SERVER=true 
-ENV DATABASE_PATH=/app/data/manager.db  
+ENV HOME=/app
+ENV PHX_SERVER=true
+ENV DATABASE_PATH=/app/data/manager.db
 
 VOLUME ["/app/data"]
-EXPOSE 4000   
+EXPOSE 4000
 
-# Roda migrations e inicia o servidor   
+ENTRYPOINT ["/app/bin/entrypoint.sh"]
 CMD ["/bin/sh", "-c", "/app/bin/manager eval 'Manager.Release.migrate()' && /app/bin/manager start"]
