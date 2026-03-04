@@ -75,7 +75,7 @@ defmodule ManagerWeb.Layouts do
       <main class="flex-1 overflow-y-auto bg-base-100">
         <.flash_group flash={@flash} />
         <div class="p-6">
-          {render_slot(@inner_block)}
+          <%= if Map.has_key?(assigns, :inner_block), do: render_slot(@inner_block) %>
         </div>
       </main>
     </div>
