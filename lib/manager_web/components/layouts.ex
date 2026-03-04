@@ -28,8 +28,23 @@ defmodule ManagerWeb.Layouts do
   def app(assigns) do
     ~H"""
     <div class="flex h-screen overflow-hidden">
+      <%!-- Mobile sidebar overlay --%>
+      <div
+        id="sidebar-overlay"
+        class="fixed inset-0 z-30 bg-black/50 hidden lg:hidden"
+        phx-click={
+          JS.add_class("hidden", to: "#sidebar-overlay")
+          |> JS.remove_class("translate-x-0", to: "#app-sidebar")
+          |> JS.add_class("-translate-x-full", to: "#app-sidebar")
+        }
+      >
+      </div>
+
       <%!-- Sidebar --%>
-      <aside class="w-64 flex-shrink-0 bg-base-200 border-r border-base-300 flex flex-col">
+      <aside
+        id="app-sidebar"
+        class="fixed inset-y-0 left-0 z-40 w-64 flex-shrink-0 bg-base-200 border-r border-base-300 flex flex-col transition-transform duration-300 -translate-x-full lg:relative lg:translate-x-0"
+      >
         <%!-- Logo --%>
         <div class="p-4 border-b border-base-300">
           <a href={~p"/"} class="flex items-center gap-2">
@@ -72,12 +87,35 @@ defmodule ManagerWeb.Layouts do
       </aside>
 
       <%!-- Main content --%>
-      <main class="flex-1 overflow-y-auto bg-base-100">
-        <.flash_group flash={@flash} />
-        <div class="p-6">
-          <%= if Map.has_key?(assigns, :inner_block), do: render_slot(@inner_block), else: @inner_content %>
-        </div>
-      </main>
+      <div class="flex-1 flex flex-col overflow-hidden min-w-0">
+        <%!-- Mobile header --%>
+        <header class="flex items-center gap-3 px-4 h-14 bg-base-200 border-b border-base-300 flex-shrink-0 lg:hidden">
+          <button
+            phx-click={
+              JS.remove_class("hidden", to: "#sidebar-overlay")
+              |> JS.remove_class("-translate-x-full", to: "#app-sidebar")
+              |> JS.add_class("translate-x-0", to: "#app-sidebar")
+            }
+            class="btn btn-ghost btn-sm p-1"
+          >
+            <.icon name="hero-bars-3" class="size-5" />
+          </button>
+          <a href={~p"/"} class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-primary rounded flex items-center justify-center">
+              <.icon name="hero-banknotes" class="size-4 text-primary-content" />
+            </div>
+            <span class="font-bold text-base-content">Financeiro</span>
+          </a>
+        </header>
+
+        <%!-- Page content --%>
+        <main class="flex-1 overflow-y-auto bg-base-100">
+          <.flash_group flash={@flash} />
+          <div class="p-4 sm:p-6">
+            <%= if Map.has_key?(assigns, :inner_block), do: render_slot(@inner_block), else: @inner_content %>
+          </div>
+        </main>
+      </div>
     </div>
     """
   end
@@ -90,6 +128,11 @@ defmodule ManagerWeb.Layouts do
     ~H"""
     <.link
       href={@href}
+      phx-click={
+        JS.add_class("hidden", to: "#sidebar-overlay")
+        |> JS.remove_class("translate-x-0", to: "#app-sidebar")
+        |> JS.add_class("-translate-x-full", to: "#app-sidebar")
+      }
       class="flex items-center gap-3 px-3 py-2 rounded-lg text-base-content/70 hover:text-base-content hover:bg-base-300 transition-colors text-sm font-medium"
     >
       <.icon name={@icon} class="size-4 flex-shrink-0" />

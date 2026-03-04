@@ -62,7 +62,7 @@ defmodule ManagerWeb.TransactionsLive.New do
               <.input field={@form[:description]} label="Descrição" placeholder="Ex: Almoço, Mercado, Salário..." />
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <.input field={@form[:amount]} type="number" label="Valor (R$)" step="0.01" placeholder="0,00" />
               </div>

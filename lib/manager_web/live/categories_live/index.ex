@@ -63,7 +63,7 @@ defmodule ManagerWeb.CategoriesLive.Index do
           <div class="card-body p-4">
             <h2 class="font-semibold text-base-content mb-4">Nova Categoria</h2>
             <.form for={@form} phx-submit="save" class="space-y-4">
-              <div class="grid grid-cols-3 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="col-span-2">
                   <.input field={@form[:name]} label="Nome" placeholder="Ex: Alimentação" />
                 </div>

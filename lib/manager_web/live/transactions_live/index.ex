@@ -50,7 +50,7 @@ defmodule ManagerWeb.TransactionsLive.Index do
   def render(assigns) do
     ~H"""
     <div class="space-y-6">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between flex-wrap gap-2">
         <h1 class="text-2xl font-bold text-base-content">Transações</h1>
         <.link href={~p"/transactions/new"} class="btn btn-primary btn-sm gap-2">
           <.icon name="hero-plus" class="size-4" />
@@ -59,7 +59,7 @@ defmodule ManagerWeb.TransactionsLive.Index do
       </div>
 
       <%!-- Filters --%>
-      <div class="flex items-center gap-3">
+      <div class="flex items-center flex-wrap gap-2">
         <div class="flex gap-1">
           <button phx-click="prev-month" class="btn btn-ghost btn-xs">
             <.icon name="hero-chevron-left" class="size-4" />
@@ -112,7 +112,7 @@ defmodule ManagerWeb.TransactionsLive.Index do
                     {if t.type == "income", do: "+", else: "-"}{format_currency(t.amount)}
                   </span>
                   <button phx-click="delete" phx-value-id={t.id}
-                    class="btn btn-ghost btn-xs opacity-0 group-hover:opacity-100 text-error"
+                    class="btn btn-ghost btn-xs text-error sm:opacity-0 sm:group-hover:opacity-100"
                     data-confirm="Remover esta transação?">
                     <.icon name="hero-trash" class="size-3" />
                   </button>

@@ -60,7 +60,7 @@ defmodule ManagerWeb.CreditCardsLive.Index do
           <div class="card-body p-4">
             <h2 class="font-semibold text-base-content mb-4">Novo Cartão</h2>
             <.form for={@form} phx-submit="save" class="space-y-4">
-              <div class="grid grid-cols-2 gap-4">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="col-span-2">
                   <.input field={@form[:name]} label="Nome do Cartão" placeholder="Ex: Nubank Roxinho" />
                 </div>
