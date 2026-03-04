@@ -39,17 +39,22 @@ defmodule Manager.Finance.Accounts do
         from t in Transaction,
           where: t.account_id == ^account.id and t.type == "income",
           select: coalesce(sum(t.amount), 0)
-      ) || Decimal.new(0)
+      ) |> to_decimal()
 
     expense =
       Repo.one(
         from t in Transaction,
           where: t.account_id == ^account.id and t.type in ["expense", "transfer"],
           select: coalesce(sum(t.amount), 0)
-      ) || Decimal.new(0)
+      ) |> to_decimal()
 
     Decimal.add(account.initial_balance, Decimal.sub(income, expense))
   end
+
+  defp to_decimal(nil), do: Decimal.new(0)
+  defp to_decimal(v) when is_float(v), do: Decimal.from_float(v)
+  defp to_decimal(v) when is_integer(v), do: Decimal.new(v)
+  defp to_decimal(%Decimal{} = v), do: v
 
   def list_accounts_with_balance do
     accounts = list_accounts()

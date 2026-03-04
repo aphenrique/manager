@@ -149,10 +149,15 @@ defmodule Manager.Finance.Transactions do
 
   defp find_amount(rows, type) do
     case Enum.find(rows, fn {t, _} -> t == type end) do
-      {_, amount} -> amount
+      {_, amount} -> to_decimal(amount)
       nil -> Decimal.new(0)
     end
   end
+
+  defp to_decimal(nil), do: Decimal.new(0)
+  defp to_decimal(v) when is_float(v), do: Decimal.from_float(v)
+  defp to_decimal(v) when is_integer(v), do: Decimal.new(v)
+  defp to_decimal(%Decimal{} = v), do: v
 
   defp attach_to_open_bill(%Transaction{credit_card_id: card_id} = transaction) do
     card = Repo.get!(Manager.Finance.CreditCard, card_id)

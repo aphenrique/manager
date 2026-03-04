@@ -67,7 +67,7 @@ defmodule Manager.Finance.CreditCards do
         from t in Transaction,
           where: t.credit_card_bill_id == ^bill.id,
           select: coalesce(sum(t.amount), 0)
-      ) || Decimal.new(0)
+      ) |> to_decimal()
 
     bill
     |> CreditCardBill.changeset(%{status: "closed", total_amount: total})
@@ -105,7 +105,7 @@ defmodule Manager.Finance.CreditCards do
           from t in Transaction,
             where: t.credit_card_bill_id == ^bill.id,
             select: coalesce(sum(t.amount), 0)
-        ) || Decimal.new(0)
+        ) |> to_decimal()
 
       _ ->
         Decimal.new(0)
@@ -128,6 +128,11 @@ defmodule Manager.Finance.CreditCards do
       Date.beginning_of_month(next_month)
     end
   end
+
+  defp to_decimal(nil), do: Decimal.new(0)
+  defp to_decimal(v) when is_float(v), do: Decimal.from_float(v)
+  defp to_decimal(v) when is_integer(v), do: Decimal.new(v)
+  defp to_decimal(%Decimal{} = v), do: v
 
   defp create_open_bill(%CreditCard{} = card, reference_month, _today) do
     closing_date = %{reference_month | day: min(card.closing_day, Date.days_in_month(reference_month))}
