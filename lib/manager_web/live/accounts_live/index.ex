@@ -155,6 +155,8 @@ defmodule ManagerWeb.AccountsLive.Index do
   defp account_type_label(_), do: "Conta"
 
   defp format_currency(amount) when is_nil(amount), do: "R$ 0,00"
+  defp format_currency(amount) when is_integer(amount), do: format_currency(Decimal.new(amount))
+  defp format_currency(amount) when is_float(amount), do: format_currency(Decimal.from_float(amount))
   defp format_currency(amount) do
     value = Decimal.to_float(amount)
     abs_value = abs(value)

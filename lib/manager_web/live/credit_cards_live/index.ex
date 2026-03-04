@@ -133,6 +133,8 @@ defmodule ManagerWeb.CreditCardsLive.Index do
   end
 
   defp format_currency(amount) when is_nil(amount), do: "R$ 0,00"
+  defp format_currency(amount) when is_integer(amount), do: format_currency(Decimal.new(amount))
+  defp format_currency(amount) when is_float(amount), do: format_currency(Decimal.from_float(amount))
   defp format_currency(amount) do
     value = Decimal.to_float(amount)
     formatted = :erlang.float_to_binary(value, decimals: 2)

@@ -171,6 +171,8 @@ defmodule ManagerWeb.ReportsLive do
   defp month_name(12), do: "Dez"
 
   defp format_currency(amount) when is_nil(amount), do: "R$ 0,00"
+  defp format_currency(amount) when is_integer(amount), do: format_currency(Decimal.new(amount))
+  defp format_currency(amount) when is_float(amount), do: format_currency(Decimal.from_float(amount))
   defp format_currency(amount) do
     value = Decimal.to_float(amount)
     abs_value = abs(value)
