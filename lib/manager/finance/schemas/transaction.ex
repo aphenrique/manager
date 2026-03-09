@@ -8,6 +8,7 @@ defmodule Manager.Finance.Transaction do
     field :type, :string
     field :date, :date
     field :notes, :string
+    field :incoming_transfer, :boolean, default: false
 
     belongs_to :account, Manager.Finance.Account
     belongs_to :credit_card, Manager.Finance.CreditCard
@@ -27,6 +28,7 @@ defmodule Manager.Finance.Transaction do
       :type,
       :date,
       :notes,
+      :incoming_transfer,
       :account_id,
       :credit_card_id,
       :credit_card_bill_id,

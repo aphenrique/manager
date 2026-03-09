@@ -17,7 +17,9 @@ defmodule ManagerWeb.TransactionsLive.New do
      |> assign(:accounts, accounts)
      |> assign(:credit_cards, credit_cards)
      |> assign(:categories, categories)
-     |> assign(:destination_type, "account")}
+     |> assign(:destination_type, "account")
+     |> assign(:transfer_destination_type, "account")
+     |> assign(:selected_type, "expense")}
   end
 
   @impl true
@@ -25,8 +27,23 @@ defmodule ManagerWeb.TransactionsLive.New do
     {:noreply, assign(socket, :destination_type, type)}
   end
 
+  def handle_event("transfer-destination-type", %{"type" => type}, socket) do
+    {:noreply, assign(socket, :transfer_destination_type, type)}
+  end
+
+  def handle_event("type-changed", %{"transaction" => %{"type" => type}}, socket) do
+    {:noreply, assign(socket, :selected_type, type)}
+  end
+
   def handle_event("save", %{"transaction" => params}, socket) do
-    case Transactions.create_transaction(params) do
+    result =
+      if params["type"] == "transfer" do
+        Transactions.create_transfer(params)
+      else
+        Transactions.create_transaction(params)
+      end
+
+    case result do
       {:ok, _transaction} ->
         {:noreply,
          socket
@@ -52,7 +69,7 @@ defmodule ManagerWeb.TransactionsLive.New do
 
       <div class="card bg-base-200 border border-base-300">
         <div class="card-body p-4">
-          <.form for={@form} phx-submit="save" class="space-y-4">
+          <.form for={@form} phx-submit="save" phx-change="type-changed" class="space-y-4">
             <div>
               <.input field={@form[:type]} type="select" label="Tipo"
                 options={[{"Despesa", "expense"}, {"Receita", "income"}, {"Transferência", "transfer"}]} />
@@ -71,9 +88,11 @@ defmodule ManagerWeb.TransactionsLive.New do
               </div>
             </div>
 
-            <%!-- Destination: account or credit card --%>
+            <%!-- Origem: conta ou cartão --%>
             <div>
-              <label class="label"><span class="label-text text-base-content/70">Lançar em</span></label>
+              <label class="label"><span class="label-text text-base-content/70">
+                {if @selected_type == "transfer", do: "Conta origem", else: "Lançar em"}
+              </span></label>
               <div class="flex gap-2 mb-2">
                 <button type="button" phx-click="destination-type" phx-value-type="account"
                   class={["btn btn-sm flex-1", if(@destination_type == "account", do: "btn-primary", else: "btn-ghost")]}>
@@ -94,10 +113,45 @@ defmodule ManagerWeb.TransactionsLive.New do
               <% end %>
             </div>
 
-            <div>
-              <.input field={@form[:category_id]} type="select" label="Categoria (opcional)"
-                options={[{"— Sem categoria —", nil}] ++ Enum.map(@categories, &{&1.name, &1.id})} />
-            </div>
+            <%!-- Destino da transferência --%>
+            <%= if @selected_type == "transfer" do %>
+              <div>
+                <label class="label"><span class="label-text text-base-content/70">Conta destino</span></label>
+                <div class="flex gap-2 mb-2">
+                  <button type="button" phx-click="transfer-destination-type" phx-value-type="account"
+                    class={["btn btn-sm flex-1", if(@transfer_destination_type == "account", do: "btn-primary", else: "btn-ghost")]}>
+                    Conta
+                  </button>
+                  <button type="button" phx-click="transfer-destination-type" phx-value-type="credit_card"
+                    class={["btn btn-sm flex-1", if(@transfer_destination_type == "credit_card", do: "btn-primary", else: "btn-ghost")]}>
+                    Cartão
+                  </button>
+                </div>
+
+                <%= if @transfer_destination_type == "account" do %>
+                  <select name="transaction[destination_account_id]" class="select select-bordered w-full">
+                    <option value="">— Selecione uma conta destino —</option>
+                    <%= for a <- @accounts do %>
+                      <option value={a.id}>{a.name}</option>
+                    <% end %>
+                  </select>
+                <% else %>
+                  <select name="transaction[destination_credit_card_id]" class="select select-bordered w-full">
+                    <option value="">— Selecione um cartão destino —</option>
+                    <%= for c <- @credit_cards do %>
+                      <option value={c.id}>{c.name}</option>
+                    <% end %>
+                  </select>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%= if @selected_type != "transfer" do %>
+              <div>
+                <.input field={@form[:category_id]} type="select" label="Categoria (opcional)"
+                  options={[{"— Sem categoria —", nil}] ++ Enum.map(@categories, &{&1.name, &1.id})} />
+              </div>
+            <% end %>
 
             <div>
               <.input field={@form[:notes]} label="Observações (opcional)" placeholder="Detalhes adicionais..." />

@@ -41,14 +41,21 @@ defmodule Manager.Finance.Accounts do
           select: coalesce(sum(t.amount), 0)
       ) |> to_decimal()
 
-    expense =
+    incoming_transfers =
       Repo.one(
         from t in Transaction,
-          where: t.account_id == ^account.id and t.type in ["expense", "transfer"],
+          where: t.account_id == ^account.id and t.type == "transfer" and t.incoming_transfer == true,
           select: coalesce(sum(t.amount), 0)
       ) |> to_decimal()
 
-    Decimal.add(account.initial_balance, Decimal.sub(income, expense))
+    expense =
+      Repo.one(
+        from t in Transaction,
+          where: t.account_id == ^account.id and t.type in ["expense", "transfer"] and t.incoming_transfer == false,
+          select: coalesce(sum(t.amount), 0)
+      ) |> to_decimal()
+
+    Decimal.add(account.initial_balance, Decimal.sub(Decimal.add(income, incoming_transfers), expense))
   end
 
   defp to_decimal(nil), do: Decimal.new(0)

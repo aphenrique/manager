@@ -93,9 +93,14 @@ defmodule ManagerWeb.AccountsLive.Show do
               <div class="flex items-center justify-between py-2 border-b border-base-300/50 last:border-0">
                 <div class="flex items-center gap-3">
                   <div class={["w-8 h-8 rounded-full flex items-center justify-center",
-                    if(t.type == "income", do: "bg-success/10", else: "bg-error/10")]}>
-                    <.icon name={if t.type == "income", do: "hero-arrow-up", else: "hero-arrow-down"}
-                      class={["size-4", if(t.type == "income", do: "text-success", else: "text-error")]} />
+                    if(t.type == "income" or (t.type == "transfer" and t.incoming_transfer), do: "bg-success/10", else: "bg-error/10")]}>
+                    <.icon name={cond do
+                        t.type == "income" -> "hero-arrow-up"
+                        t.type == "transfer" and t.incoming_transfer -> "hero-arrow-down-left"
+                        t.type == "transfer" -> "hero-arrow-up-right"
+                        true -> "hero-arrow-down"
+                      end}
+                      class={["size-4", if(t.type == "income" or (t.type == "transfer" and t.incoming_transfer), do: "text-success", else: "text-error")]} />
                   </div>
                   <div>
                     <p class="text-sm text-base-content">{t.description}</p>
@@ -105,8 +110,8 @@ defmodule ManagerWeb.AccountsLive.Show do
                     </p>
                   </div>
                 </div>
-                <span class={["text-sm font-semibold", if(t.type == "income", do: "text-success", else: "text-error")]}>
-                  {if t.type == "income", do: "+", else: "-"}{format_currency(t.amount)}
+                <span class={["text-sm font-semibold", if(t.type == "income" or (t.type == "transfer" and t.incoming_transfer), do: "text-success", else: "text-error")]}>
+                  {if t.type == "income" or (t.type == "transfer" and t.incoming_transfer), do: "+", else: "-"}{format_currency(t.amount)}
                 </span>
               </div>
             <% end %>

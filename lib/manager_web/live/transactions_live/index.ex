@@ -90,11 +90,19 @@ defmodule ManagerWeb.TransactionsLive.Index do
                   <div class={["w-8 h-8 rounded-full flex items-center justify-center shrink-0",
                     case t.type do
                       "income" -> "bg-success/10"
-                      "transfer" -> "bg-info/10"
+                      "transfer" -> if(t.incoming_transfer, do: "bg-success/10", else: "bg-info/10")
                       _ -> "bg-error/10"
                     end]}>
-                    <.icon name={case t.type do "income" -> "hero-arrow-up"; "transfer" -> "hero-arrow-right"; _ -> "hero-arrow-down" end}
-                      class={["size-4", case t.type do "income" -> "text-success"; "transfer" -> "text-info"; _ -> "text-error" end]} />
+                    <.icon name={case t.type do
+                        "income" -> "hero-arrow-up"
+                        "transfer" -> if(t.incoming_transfer, do: "hero-arrow-down-left", else: "hero-arrow-up-right")
+                        _ -> "hero-arrow-down"
+                      end}
+                      class={["size-4", case t.type do
+                        "income" -> "text-success"
+                        "transfer" -> if(t.incoming_transfer, do: "text-success", else: "text-info")
+                        _ -> "text-error"
+                      end]} />
                   </div>
                   <div>
                     <p class="text-sm text-base-content">{t.description}</p>
@@ -108,8 +116,12 @@ defmodule ManagerWeb.TransactionsLive.Index do
                 </div>
                 <div class="flex items-center gap-3">
                   <span class={["text-sm font-semibold",
-                    case t.type do "income" -> "text-success"; "transfer" -> "text-info"; _ -> "text-error" end]}>
-                    {if t.type == "income", do: "+", else: "-"}{format_currency(t.amount)}
+                    case t.type do
+                      "income" -> "text-success"
+                      "transfer" -> if(t.incoming_transfer, do: "text-success", else: "text-info")
+                      _ -> "text-error"
+                    end]}>
+                    {if t.type == "income" or (t.type == "transfer" and t.incoming_transfer), do: "+", else: "-"}{format_currency(t.amount)}
                   </span>
                   <.link href={~p"/transactions/#{t.id}/edit"}
                     class="btn btn-ghost btn-xs sm:opacity-0 sm:group-hover:opacity-100">

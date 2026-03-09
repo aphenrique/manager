@@ -1,6 +1,7 @@
 defmodule Manager.Finance.Transactions do
   import Ecto.Query
   alias Manager.Repo
+  alias Ecto.Multi
   alias Manager.Finance.{Transaction, CreditCards}
 
   def list_transactions(filters \\ %{}) do
@@ -33,6 +34,33 @@ defmodule Manager.Finance.Transactions do
 
       error ->
         error
+    end
+  end
+
+  def create_transfer(attrs \\ %{}) do
+    outgoing_attrs = Map.merge(attrs, %{"type" => "transfer", "incoming_transfer" => false})
+
+    incoming_attrs =
+      attrs
+      |> Map.drop(["account_id", "credit_card_id"])
+      |> Map.merge(%{
+        "type" => "transfer",
+        "incoming_transfer" => true,
+        "account_id" => attrs["destination_account_id"],
+        "credit_card_id" => attrs["destination_credit_card_id"]
+      })
+
+    Multi.new()
+    |> Multi.run(:outgoing, fn _repo, _changes ->
+      create_transaction(outgoing_attrs)
+    end)
+    |> Multi.run(:incoming, fn _repo, _changes ->
+      create_transaction(incoming_attrs)
+    end)
+    |> Repo.transaction()
+    |> case do
+      {:ok, %{outgoing: outgoing}} -> {:ok, outgoing}
+      {:error, _step, changeset, _changes} -> {:error, changeset}
     end
   end
 
