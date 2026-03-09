@@ -111,6 +111,10 @@ defmodule ManagerWeb.TransactionsLive.Index do
                     case t.type do "income" -> "text-success"; "transfer" -> "text-info"; _ -> "text-error" end]}>
                     {if t.type == "income", do: "+", else: "-"}{format_currency(t.amount)}
                   </span>
+                  <.link href={~p"/transactions/#{t.id}/edit"}
+                    class="btn btn-ghost btn-xs sm:opacity-0 sm:group-hover:opacity-100">
+                    <.icon name="hero-pencil" class="size-3" />
+                  </.link>
                   <button phx-click="delete" phx-value-id={t.id}
                     class="btn btn-ghost btn-xs text-error sm:opacity-0 sm:group-hover:opacity-100"
                     data-confirm="Remover esta transação?">

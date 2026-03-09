@@ -29,6 +29,7 @@ defmodule ManagerWeb.Router do
       live "/credit-cards/:id", CreditCardsLive.Show
       live "/transactions", TransactionsLive.Index
       live "/transactions/new", TransactionsLive.New
+      live "/transactions/:id/edit", TransactionsLive.Edit
       live "/categories", CategoriesLive.Index
       live "/reports", ReportsLive
     end
