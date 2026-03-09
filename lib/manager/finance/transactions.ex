@@ -89,6 +89,7 @@ defmodule Manager.Finance.Transactions do
         },
         order_by: [desc: coalesce(sum(t.amount), 0)]
     )
+    |> Enum.map(fn row -> %{row | total: to_decimal(row.total)} end)
   end
 
   # Tendência de gastos dos últimos N meses
